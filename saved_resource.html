@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<!-- saved from url=(0012)about:srcdoc -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.js" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.dom.min.js" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.sound.min.js" crossorigin=""></script>
+<script src="https://assets.editor.p5js.org/5c5bc37c07d9ce001edcb109/8d4f329a-9fae-4858-bcef-dcaf81aff5a8.js" crossorigin=""></script>
+    
+    
+
+  <!--<base href="https://editor.p5js.org/harishchandhiran/sketches/RFGCBgSe5/">--><base href="."><style>
+html, body {
+  margin: 0;
+  padding: 0;
+}
+canvas {
+  display: block;
+}
+</style><script src="https://editor.p5js.org/previewScripts.js"></script><style data-emotion=""></style><script>
+    function getScriptOff(line) {
+      var offs = [[56,"sketch"]];
+      var l = 0;
+      var file = '';
+      for (var i=0; i<offs.length; i++) {
+        var n = offs[i][0];
+        if (n < line && n > l) {
+          l = n;
+          file = offs[i][1];
+        }
+      }
+      return [line - l, file];
+    }
+    // catch reference errors, via http://stackoverflow.com/a/12747364/2994108
+    window.onerror = function (msg, url, lineNumber, columnNo, error) {
+        var string = msg.toLowerCase();
+        var substring = "script error";
+        var data = {};
+        if (url.match(/^(http:\/\/|https:\/\/)/) !== null && error.stack){
+          var errorNum = error.stack.split('about:srcdoc:')[1].split(':')[0];
+          var fileInfo = getScriptOff(errorNum);
+          data = msg + ' (' + fileInfo[1] + ': line ' + fileInfo[0] + ')';
+        } else {
+          var fileInfo = getScriptOff(lineNumber);
+          data = msg + ' (' + fileInfo[1] + ': line ' + fileInfo[0] + ')';
+        }
+        window.parent.postMessage([{
+          log: [{
+            method: 'error',
+            data: [data],
+            id: Date.now().toString()
+          }],
+          source: fileInfo[1]
+        }], '*');
+      return false;
+    };
+  </script></head>
+  <body>
+      <script data-tag="@fs-sketch.js">
+var player,playerImage;
+var enemyGroup,enemyImage;
+var score = 0;
+var border1,border2;
+var gamestate = 1;
+var i = 0;
+
+
+function preload(){
+  playerImage = loadImage("https://assets.editor.p5js.org/5e57becd0bf5f8001fbc3c29/f61c71a9-e4a6-4274-a417-d7fe5e5bb954.png");
+  enemyImage = loadImage("https://assets.editor.p5js.org/5e57becd0bf5f8001fbc3c29/1d104a9c-c3a5-4f10-ab57-bbbfb79d3da3.png");
+}
+
+function setup() {
+
+  createCanvas(400, 500);
+
+
+  border1 = createSprite(0,250,10,500);
+  border2 = createSprite(400,250,10,500);
+
+
+  player = createSprite(200,400,100,100);
+  player.addImage(playerImage);
+  player.scale = 0.15;
+
+
+  enemyGroup = new Group();
+}
+
+function draw() {
+
+  background(0);
+
+  textSize(18);
+  fill("red");
+  text("Score: "+ Math.round(i/10), 50,50);
+
+    if(gamestate === 1){
+
+    i = i + 1;
+
+    if(keyWentDown(RIGHT_ARROW)){
+      player.velocityX =  3;
+    }  
+    if(keyWentUp(RIGHT_ARROW)){
+      player.velocityX =  0;
+    }  
+    if(keyWentDown(LEFT_ARROW)){
+      player.velocityX =  -3;
+    }  
+    if(keyWentUp(LEFT_ARROW)){
+      player.velocityX =  0;
+    }  
+
+
+    spawnEnimies();
+    drawSprites();
+  }
+
+
+  if(player.isTouching(border1)){
+    gamestate = 2;   
+  }   
+  if(player.isTouching(border2)){
+    gamestate = 2;   
+  }   
+
+    if(player.isTouching(enemyGroup)){
+    gamestate = 2;
+  }  
+
+
+  if(gamestate === 2){
+    textSize(30);
+    fill("red");
+    text("GAME ENDS",100,250);
+  }  
+}
+
+function spawnEnimies() {
+
+  if (frameCount % 20 === 0) {
+
+    var enemy = createSprite(200,-20,100,100);
+
+    enemy.x = Math.round(random(20,380));
+
+    enemy.addImage(enemyImage);
+
+    enemy.scale = 0.2;
+
+    enemy.velocityY = 5;
+
+
+    enemy.lifetime = 200;
+
+
+
+    enemy.depth = player.depth;
+    player.depth = player.depth + 1;
+
+
+    enemyGroup.add(enemy);
+  }
+
+  }</script>
+  
+
+<canvas id="defaultCanvas0" class="p5Canvas" width="400" height="500" style="width: 400px; height: 500px;"></canvas></body></html>
